@@ -29,7 +29,7 @@ A capacidade de transformar solicitações em linguagem natural em chamadas de f
 
 ---
 
-![Texto alternativo da imagem](https://github.com/humanlayer/12-factor-agents/raw/main/img/110-natural-language-tool-calls.png)
+!["Texto alternativo da imagem"](https://github.com/humanlayer/12-factor-agents/raw/main/img/110-natural-language-tool-calls.png)
 
 ---
 
@@ -108,7 +108,7 @@ img[alt~="center"] {
 
 ---
 
-![Texto alternativo da imagem](https://github.com/humanlayer/12-factor-agents/raw/main/img/120-own-your-prompts.png)
+!["Texto alternativo da imagem"](https://github.com/humanlayer/12-factor-agents/raw/main/img/120-own-your-prompts.png)
 
 ---
 
@@ -157,7 +157,7 @@ A janela de contexto serve como entrada para o LLM, abrangendo prompts, históri
 
 ---
 
-![Texto alternativo da imagem](https://raw.githubusercontent.com/humanlayer/12-factor-agents/main/img/220-context-engineering.png)
+!["Texto alternativo da imagem"](https://raw.githubusercontent.com/humanlayer/12-factor-agents/main/img/220-context-engineering.png)
 
 ---
 
