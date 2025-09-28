@@ -380,3 +380,219 @@ Ele precisa de **fluxo de controle explícito**, com **decisões claras, retries
 ---
 
 ### 9. Compacte erros na Janela de Contexto
+Incluir erros diretamente na janela de contexto permite que agentes de IA aprendam com falhas e ajustem sua abordagem.
+
+Modelos de linguagem têm limite de tokens, portanto não é viável enviar todas as falhas ou logs detalhados no contexto.
+
+---
+
+!["Texto alternativo imagem"](https://github.com/humanlayer/12-factor-agents/blob/main/img/195-factor-9-errors.gif?raw=true)
+
+---
+
+```python
+consecutive_errors = 0
+
+while True:
+
+  # ... existing code ...
+
+  try:
+    result = await handle_next_step(thread, next_step)
+    thread["events"].append({
+      "type": next_step.intent + '_result',
+      data: result,
+    })
+    # success! reset the error counter
+    consecutive_errors = 0
+  except Exception as e:
+    consecutive_errors += 1
+    if consecutive_errors < 3:
+      # do the loop and try again
+      thread["events"].append({
+        "type": 'error',
+        "data": format_error(e),
+      })
+    else:
+      # break the loop, reset parts of the context window, escalate to a human, or whatever else you want to do
+      break
+  }
+}
+```
+
+---
+
+**💡 Tips** Compacte as informações de erro no próximo prompt para fechar o ciclo de feedback.
+
+- Permita que o LLM aprenda e se recupere de erros.
+- Forneça informações de erro estruturadas.
+- Suporte a capacidade de autocorreção.
+
+---
+
+✅ Essa abordagem traz algumas vantagens:
+
+**Eficiência**: menos tokens = menor custo e resposta mais rápida.
+**Confiabilidade**: o agente aprende com seus erros e se recupera dos mesmos.
+**Observabilidade**: e possivel identificar pontos de falha e ajustar fluxos.
+**Escalabilidade**: fluxos longos ou agentes múltiplos continuam operando sem estourar contexto.
+
+---
+
+> Esse fator garante que o agente não perca contexto relevante e ainda economize tokens, mantendo a confiabilidade mesmo em fluxos longos ou complexos.
+
+---
+
+### 10. Construa Agentes Pequenos e Focados
+
+Agentes pequenos que lidam com 3 a 20 etapas mantêm janelas de contexto administráveis, melhorando o desempenho e a confiabilidade do LLM. Essa abordagem proporciona:
+
+- Clareza com escopo bem definido para cada agente
+- Menor risco do agente perder o foco
+- Testes e validação mais fáceis de funções específicas
+
+---
+
+!["Texto alterantivo da imagem"](https://github.com/humanlayer/12-factor-agents/raw/main/img/1a0-small-focused-agents.png)
+
+---
+
+```python
+# agente_pedidos.py
+class AgentePedidos:
+    def processar_pedido(self, pedido_id):
+        print(f"[AgentePedidos] Processando pedido {pedido_id}")
+        return {"pedido_id": pedido_id, "status": "processado"}
+
+# agente_pagamentos.py
+class AgentePagamentos:
+    def validar_pagamento(self, pedido_id):
+        print(f"[AgentePagamentos] Validando pagamento do pedido {pedido_id}")
+        return {"pedido_id": pedido_id, "pagamento_valido": True}
+
+# orquestrador.py
+from agente_pedidos import AgentePedidos
+from agente_pagamentos import AgentePagamentos
+
+class Orquestrador:
+    def __init__(self):
+        self.agente_pedidos = AgentePedidos()
+        self.agente_pagamentos = AgentePagamentos()
+    
+    def workflow_pedido(self, pedido_id):
+        resultado_pagamento = self.agente_pagamentos.validar_pagamento(pedido_id)
+        if resultado_pagamento["pagamento_valido"]:
+            return self.agente_pedidos.processar_pedido(pedido_id)
+        else:
+            return {"pedido_id": pedido_id, "status": "falha no pagamento"}
+
+# Uso
+orquestrador = Orquestrador()
+resultado = orquestrador.workflow_pedido(123)
+print("Resultado final:", resultado)
+```
+
+---
+
+✅ Essa abordagem traz algumas vantagens:
+
+**Manutenção** mais fácil: mudanças em um agente não afetam os outros.
+**Confiabilidade**: menor chance de erro global.
+**Testabilidade**: cada agente tem inputs e outputs bem definidos.
+**Flexibilidade**: novos agentes podem ser adicionados sem refatorar o sistema existente.
+
+---
+
+> Cada agente tem uma responsabilidade clara. O orquestrador combina agentes pequenos para formar workflows maiores. Essa abordagem torna o sistema mais modular, testável e escalável.
+
+---
+
+### 11. Habilite Gatilhos de Múltiplas Fontes
+Deixe seus agentes acessíveis permitindo acionamento por Slack, e-mail ou sistemas de eventos — encontrando os usuários onde eles já trabalham.
+
+Implemente APIs que iniciam agentes a partir de diversos canais e respondem pelo mesmo meio. Isso permite:
+
+- Melhor acessibilidade ao integrar com plataformas preferidas dos usuários
+- Suporte a fluxos de trabalho de automação orientados a eventos
+- Workflows de aprovação humana para operações críticas
+
+---
+
+!["Texto alternativo da imagem"](https://github.com/humanlayer/12-factor-agents/raw/main/img/1b0-trigger-from-anywhere.png)
+
+---
+
+```python
+from datetime import datetime
+
+class Evento:
+    def __init__(self, tipo, dados, origem):
+        self.tipo = tipo
+        self.dados = dados
+        self.origem = origem
+        self.timestamp = datetime.now()
+
+class Agente:
+    def processar_evento(self, evento: Evento):
+        print(f"[{evento.timestamp}] Evento de {evento.origem} ({evento.tipo}): {evento.dados}")
+
+# Instanciando agente
+agente = Agente()
+
+# Eventos vindos de diferentes fontes
+evento_api = Evento(tipo="pedido", dados={"pedido_id": 123}, origem="API")
+evento_slack = Evento(tipo="aprovacao", dados={"pedido_id": 124}, origem="Slack")
+evento_sqs = Evento(tipo="notificacao", dados={"mensagem": "Pagamento pendente"}, origem="SQS")
+
+# Processando eventos
+agente.processar_evento(evento_api)
+agente.processar_evento(evento_slack)
+agente.processar_evento(evento_sqs)
+```
+
+---
+
+> O agente se torna reativo a múltiplas fontes de evento. Facilita integração com sistemas heterogêneos, aumento de confiabilidade e modularidade no fluxo de decisões.
+
+---
+
+### 12. Projete Agentes como Redutores Sem Estado
+Trate agentes como funções sem estado que transformam o contexto de entrada em ações de saída, simplificando a gestão de estado e tornando-os previsíveis e mais fáceis de depurar.
+
+---
+
+!["Texto alteranativo da imamge"](https://github.com/humanlayer/12-factor-agents/raw/main/img/1c0-stateless-reducer.png)
+
+---
+
+Um agente não deve armazenar estado interno de longo prazo. Ele deve receber entradas, processá-las e emitir saídas, sem depender de memória própria para decisões futuras.
+
+O estado de negócio ou histórico deve ser armazenado externamente (DB, cache, eventos).
+
+Essa abordagem permite escala horizontal, reexecução e consistência.
+
+---
+
+✅ Essa abordagem traz algumas vantagens:
+
+**Escalabilidade horizontal**: agentes podem ser replicados facilmente.
+**Resiliência:** crash do agente não perde informações.
+**Reprodutibilidade:** inputs determinam outputs de forma consistente.
+**Simplicidade:** código do agente é mais previsível e testável.
+
+---
+
+> O agente não mantém estado interno, atuando como um reducer: transforma inputs em outputs. Todo estado relevante é persistido externamente, permitindo escala, reexecução e confiabilidade.
+
+---
+
+### Referencias:
+
+[Twelve Factor Agents](https://github.com/humanlayer/12-factor-agents/tree/main)
+[Twelve Factor Agents for Building Effective AI Systems at Scale](https://www.flowhunt.io/pt/blog/the-12-factor-ai-agent-building-effective-ai-systems-that-scale/)
+[Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)
+[Show me the Prompts](https://hamel.dev/blog/posts/prompt/)
+
+---
+
+![w:740 center "Texto alternativo da imagem"](https://clampettstudio.com/cdn/shop/files/That_sallFolks_1_web.jpg?v=1752108572&width=1445)
