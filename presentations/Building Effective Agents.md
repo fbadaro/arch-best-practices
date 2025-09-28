@@ -273,3 +273,110 @@ Implemente APIs que permitam iniciar, pausar e retomar agentes, com armazenament
 > Esse fator permite que tarefas longas ou agentes complexos sejam totalmente controláveis via APIs, tornando o sistema previsível, seguro e auditável.
 
 ---
+
+### 7. Habilite Colaboração Humana com Chamadas de Ferramenta
+
+Agentes de IA as vezes necessitam de input humano para decisões críticas ou situações ambíguas. Usar chamadas de ferramentas estruturadas torna essa interação fluida:
+
+---
+
+!["Texto alternativo da imagem"](https://github.com/humanlayer/12-factor-agents/raw/main/img/170-contact-humans-with-tools.png)
+
+---
+
+```python
+class Options:
+  urgency: Literal["low", "medium", "high"]
+  format: Literal["free_text", "yes_no", "multiple_choice"]
+  choices: List[str]
+
+# Tool definition for human interaction
+class RequestHumanInput:
+  intent: "request_human_input"
+  question: str
+  context: str
+  options: Options
+
+# Example usage in the agent loop
+if nextStep.intent == 'request_human_input':
+  thread.events.append({
+    type: 'human_input_requested',
+    data: nextStep
+  })
+  thread_id = await save_state(thread)
+  await notify_human(nextStep, thread_id)
+  return # Break loop and wait for response to come back with thread ID
+```
+
+---
+
+✅ Essa abordagem traz algumas vantagens:
+
+**Segurança** e conformidade: decisões críticas passam por revisão humana.
+**Resiliência**: agente continua workflow mesmo quando precisa de ajuda.
+**Rastreabilidade**: histórico claro de decisões e interações.
+**Escalabilidade**: humanos podem atuar apenas em pontos críticos, agentes cuidam do restante.
+
+---
+
+> O agente deve saber quando envolver humanos, como notificar e como processar a resposta, mantendo todo o fluxo estruturado e auditável.
+
+---
+
+### 8. Controle o Fluxo do Seu Agente
+Fluxo de controle personalizado permite pausar para aprovação humana, armazenar resultados em cache ou implementar limitações de taxa — adaptando o comportamento do agente às suas necessidades específicas.
+
+---
+
+!["Texto alteranativo da imagem"](https://github.com/humanlayer/12-factor-agents/raw/main/img/180-control-flow.png)
+
+---
+
+```python
+async function handleNextStep(thread: Thread) {
+  while (true) {
+    const nextStep = await determineNextStep(threadToPrompt(thread));
+    if (nextStep.intent === 'request_clarification') {
+      await sendMessageToHuman(nextStep);
+      await db.saveThread(thread);
+      break;
+    } else if (nextStep.intent === 'fetch_open_issues') {
+      const issues = await linearClient.issues();
+      thread.events.push({ type: 'fetch_open_issues_result', data: issues });
+      continue;
+    }
+  }
+}
+```
+
+---
+
+**💡 Tips**
+
+- Execute um ciclo OODA explícito (Observar-Orientar-Decidir-Agir).
+- Use heurísticas de convergência em vez de prompts aninhados.
+- Evite que o LLM gerencie fluxos de controle complexos.
+
+---
+
+### Ciclo OODA
+
+![center "Texto alternativo da imagem"](https://upload.wikimedia.org/wikipedia/commons/3/3a/OODA.Boyd.svg)
+
+---
+
+✅ Essa abordagem traz algumas vantagens:
+
+**Resiliência**: lida com falhas e instabilidades externas.
+**Previsibilidade**: comportamento do agente é determinístico e auditável.
+**Segurança**: evita decisões automáticas fora do esperado.
+**Escalabilidade**: múltiplos agentes podem seguir o mesmo fluxo padrão.
+
+---
+
+> O agente **não deve depender apenas do modelo para decidir o que fazer**.
+Ele precisa de **fluxo de controle explícito**, com **decisões claras, retries, timeouts e fallbacks**, garantindo confiabilidade e previsibilidade.
+
+---
+
+### 9. Compacte erros na Janela de Contexto
