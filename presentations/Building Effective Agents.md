@@ -240,3 +240,36 @@ Em vez disso, armazene todo o estado diretamente na janela de contexto, inferind
 - **Resiliência**: agentes podem retomar de onde pararam.
 
 ---
+
+> Esse fator garante que o cérebro do agente (LLM) e o mundo real (negócio) estejam sempre sincronizados e auditáveis.
+
+---
+
+### 6. Projete APIs para Iniciar, Pausar e Retomar
+
+Agentes de nível de produção precisam se integrar perfeitamente a sistemas externos, pausando para tarefas longas e retomando quando acionados por webhooks ou outros eventos.
+
+Implemente APIs que permitam iniciar, pausar e retomar agentes, com armazenamento de estado robusto entre operações. Isso possibilita:
+
+- Suporte flexível para fluxos de trabalho assíncronos
+- Integração limpa com webhooks e outros sistemas
+- Retomada confiável após interrupções sem reiniciar
+
+---
+
+!["Texto alternativo da imagem"](https://github.com/humanlayer/12-factor-agents/raw/main/img/165-pause-resume-animation.gif)
+
+---
+
+✅ Essa abordagem traz algumas vantagens:
+
+- **Observabilidade**: sabe exatamente em que estado cada tarefa está.
+- **Resiliência**: pausa ou retoma sem perder progresso.
+- **Integração**: sistemas externos podem orquestrar agentes de forma confiável.
+- **Segurança**: evita execuções paralelas indesejadas.
+
+---
+
+> Esse fator permite que tarefas longas ou agentes complexos sejam totalmente controláveis via APIs, tornando o sistema previsível, seguro e auditável.
+
+---
