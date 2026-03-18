@@ -8,8 +8,6 @@ Transformando complexidade em clareza com Domain-Driven Design
 ---
 
 ## O que é DDD em um tweet?
-<!-- Domain Driven Design (DDD) é uma abordagem para o desenvolvimento de software que enfatiza a importância de entender o domínio do problema e modelar o software de acordo com esse entendimento. -->
-
 _"DDD não é framework, é mentalidade: negócios primeiro, código depois. Foque no problema, modele domínios, conecte arquitetura à estratégia, não à tabelas"_
 
 Introduzido por Eric Evans em seu livro "Domain-Driven Design: Tackling Complexity in the Heart of Software".

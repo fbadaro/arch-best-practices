@@ -44,7 +44,7 @@ img[alt~="center"] {
 }
 </style>
 
-![w:840 center](../presentations/src/03/01.webp)
+![w:840 center](../presentations/src/03/01.jpg)
 
 ---
 
@@ -97,7 +97,7 @@ Existem nove padrões de mapas de contexto e três relacionamentos de equipe dif
 
 ---
 
-![w:440 center](../presentations/src/03/context-map-cheat-sheet.png)
+![w:440 center](../presentations/src/03/02.png)
 
 ---
 
@@ -109,7 +109,7 @@ Existem nove padrões de mapas de contexto e três relacionamentos de equipe dif
 ---
 
 ## Cooperação
-![w:540 center](../presentations/src/03/mutual-dependent.jpg)
+![w:540 center](../presentations/src/03/03.jpg)
 
 <br>
 
@@ -119,7 +119,7 @@ Equipes trabalham juntas para alcançar um objetivo comum. Elas compartilham res
 
 ## Cliente-Fornecedor
 
-![w:540 center](../presentations/src/03/upstream-downstream.jpg)
+![w:540 center](../presentations/src/03/04.jpg)
 
 <br>
 
@@ -128,7 +128,7 @@ Uma equipe (cliente) depende de outra equipe (fornecedor) para fornecer um servi
 ---
 
 ## Caminhos Separados
-![w:540 center](../presentations/src/03/free.jpg)
+![w:540 center](../presentations/src/03/05.jpg)
 
 <br>
 
