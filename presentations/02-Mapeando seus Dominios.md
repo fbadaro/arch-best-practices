@@ -23,7 +23,7 @@ img[alt~="center"] {
 }
 </style>
 
-![w:840 center](../src/02/01.jpg)
+![w:840 center](src/02/01.jpg)
 
 <br> 
 
@@ -31,7 +31,7 @@ _A leitura do livro da capa azul é consideralvemente extensiva e complexa, mas 
 
 ---
 
-![w:760 center](../src/02/02.png)
+![w:760 center](src/02/02.png)
 
 ---
 
@@ -50,15 +50,15 @@ _**“Arquitetura começa no entendimento do negócio, não no framework.**”_
 
 ---
 
-![center](../src/02/03.png)
+![center](src/02/03.png)
 
 ---
 
-![center](../src/02/04.png)
+![center](src/02/04.png)
 
 ---
 
-![center](../src/02/05.png)
+![center](src/02/05.png)
 
 ---
 
@@ -69,7 +69,7 @@ Ex: Amazon, Uber, Netflix - todos operam em vários domínios específicos.
 
 ---
 
-![center](../src/02/06.png)
+![center](src/02/06.png)
 
 ---
 
@@ -80,7 +80,7 @@ Ex: No domínio de e-commerce, podemos ter subdomínios como "Gerenciamento de P
 
 ---
 
-![center](../src/02/07.png)
+![center](src/02/07.png)
 
 ---
 
@@ -113,34 +113,11 @@ Classifique em:
 
 ---
 
-![w:940 center](../src/02/08.jpg)
+![w:940 center](src/02/08.jpg)
 
 ---
 
-![w:1040 center](../src/02/09.jpg)
-
----
-
-### Cases:
-
-1 - [Netflix: De logistica de DVDs para streaming global](https://pt.wikipedia.org/wiki/Netflix).
-2 - [Amazon: De livraria online para marketplace global](https://pt.wikipedia.org/wiki/Amazon.com).
-
----
-
-## Dica 1: Comece pelo Core Domain
-
-Pergunte: “Qual parte do negócio gera mais valor?”
-Foque onde a empresa é única.
-
----
-
-## Dica 2: Identifique Subdomínios
-
-Classifique em:
-- Core (estratégico)
-- Supporting (apoio)
-- Generic (commodity)
+![w:1040 center](src/02/09.jpg)
 
 ---
 
@@ -162,6 +139,13 @@ Evite modelos gigantes que tentam resolver tudo.
 
 Workshops, Event Storming, entrevistas.
 Arquitetos não mapeiam sozinhos.
+
+---
+
+### Cases:
+
+1 - [Netflix: De logistica de DVDs para streaming global](https://pt.wikipedia.org/wiki/Netflix).
+2 - [Amazon: De livraria online para marketplace global](https://pt.wikipedia.org/wiki/Amazon.com).
 
 ---
 
