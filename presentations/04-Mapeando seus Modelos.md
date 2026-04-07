@@ -58,6 +58,8 @@ _**“Atacando as complexidade no coracao do software.”**_
 
 ---
 
+Referencias:
+
 [Object Calisthenics - Jeff Bay](https://bolcom.github.io/student-dojo/legacy-code/DevelopersAnonymous-ObjectCalisthenics.pdf)
 
 [Primitive Obsession - Refactoring Guru](https://refactoring.guru/smells/primitive-obsession)
@@ -163,5 +165,69 @@ public record Valor(decimal valor)
 - **Definição**: Conjuntos de entidades e value objects que formam uma unidade de consistência.
 - **Exemplo**: Um `Pedido` pode ser um agregado que contém `Itens`, `ValorTotal`, e `Status`.
 - **Benefícios**: Garantem a consistência do domínio, definem limites claros para transações, e facilitam a modelagem de regras de negócio complexas.
+
+---
+
+**💡 Dicas**
+
+- O agregado representa um limite de consistência. Todas as regras de negócio que garantem a consistência do agregado devem ser implementadas dentro do agregado.
+- A consistencia dentro do agregado e forte, mas entre agregados e eventual. Evite criar regras de negócio que dependam da consistência entre agregados diferentes.
+- Mantenha os agregados pequenos e focados. Evite criar agregados gigantescos que tentam modelar todo o domínio.
+
+---
+
+![w:840 center](src/04/05.png "Agregados")
+
+---
+
+Referencias:
+
+[Como Escolher o Banco de Dados Correto pra sua Aplicação](https://www.youtube.com/watch?v=bhw4-Kq_RPs)
+
+[Banco de Dados e seus tipos](https://miro.com/app/board/uXjVJCL6b64=/?share_link_id=911501521268)
+
+[Design Data Intensive Applications](https://www.amazon.com.br/Designing-Data-Intensive-Applications-Martin-Kleppmann/dp/1449373321)
+
+---
+
+## Eventos de Domínio
+
+- **Definição**: Representações de algo que aconteceu no domínio, geralmente usado para comunicação entre contextos ou para persistência de histórico.
+- **Exemplo**: `PedidoCriado`, `ClienteRegistrado`, `ProdutoAtualizado`.
+- **Benefícios**: Permitem modelar mudanças no domínio de forma explícita, facilitam a comunicação entre contextos, e ajudam a manter um histórico de eventos importantes.
+
+---
+
+**💡 Dicas**
+- Eventos de domínio devem ser imutáveis e conter apenas os dados necessários para descrever o evento.
+- Use eventos de domínio para comunicar mudanças importantes no domínio para outros agregados, contextos ou sistemas.
+- *Use filas para comunicacao inter-agregados, use brokers de mensagens para comunicacao inter-contextos, e use logs de eventos para persistencia de historico.
+
+---
+
+![w:840 center](src/04/06.png "Eventos de Domínio")
+
+---
+
+![w:840 center](src/04/07.png "Eventos de Domínio")
+
+---
+
+![w:840 center](src/04/08.png "Eventos de Domínio")
+
+---
+
+## Serviços de Domínio
+
+- **Definição**: Operações **sem estado** que não pertencem a nenhuma entidade ou value object específico, mas que ainda fazem parte do domínio.
+- **Exemplo**: `CalculadoraDeFrete`, `ProcessadorDePagamento`, `ValidadorDeDesconto`.
+- **Benefícios**: Permitem modelar operações complexas que não se encaixam naturalmente em uma entidade ou value object, mantendo o modelo de domínio limpo e focado, frequentemente orquestrando múltiplos Aggregates
+
+---
+
+## Repositórios
+- **Definição**: Abstrações para persistência de agregados, permitindo que o modelo de domínio permaneça independente da infraestrutura.
+- **Exemplo**: `IPedidoRepository` com métodos como `Salvar(Pedido pedido)` e `ObterPorId(int id)`.
+- **Benefícios**: Isolam o modelo de domínio da camada de persistência, facilitando testes e manutenção.
 
 ---
