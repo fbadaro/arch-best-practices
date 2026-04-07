@@ -149,6 +149,7 @@ public record Valor(decimal valor)
 
 > **Benefício**: O domínio agora é explícito. `Email` e `Valor` carregam suas próprias regras de negócio, não são apenas strings ou decimals.
 
+[PO, POJO, BO, DTO e VO](https://www.devmedia.com.br/diferenca-entre-os-patterns-po-pojo-bo-dto-e-vo/28162)
 
 ---
 
@@ -217,6 +218,12 @@ Referencias:
 
 ---
 
+Referencias:
+
+[Eventos de domínio: design e implementação](https://learn.microsoft.com/pt-br/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/domain-events-design-implementation)
+
+---
+
 ## Serviços de Domínio
 
 - **Definição**: Operações **sem estado** que não pertencem a nenhuma entidade ou value object específico, mas que ainda fazem parte do domínio.
@@ -226,8 +233,24 @@ Referencias:
 ---
 
 ## Repositórios
+
 - **Definição**: Abstrações para persistência de agregados, permitindo que o modelo de domínio permaneça independente da infraestrutura.
 - **Exemplo**: `IPedidoRepository` com métodos como `Salvar(Pedido pedido)` e `ObterPorId(int id)`.
 - **Benefícios**: Isolam o modelo de domínio da camada de persistência, facilitando testes e manutenção.
 
 ---
+
+**💡 Dicas**
+- Defina um repositorio para cada agregado raiz. O repositorio deve ser responsavel apenas por persistir o agregado raiz e seus objetos relacionados, e nao por persistir entidades ou value objects que nao fazem parte do agregado.
+- Use interfaces para definir os repositorios, e implemente-os usando a tecnologia de persistencia que melhor se adequa ao seu projeto, como por exemplo, Entity Framework, Dapper, MongoDB, etc.
+- Evite expor detalhes de implementação do repositório para o modelo de domínio. O modelo de domínio deve ser completamente independente da camada de persistência.
+
+---
+
+![w:740 center](src/04/09.png "Repositórios")
+
+---
+
+Referencias:
+
+[O padrão de repositório](https://learn.microsoft.com/pt-br/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-design)
