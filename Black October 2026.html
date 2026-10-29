@@ -1,0 +1,1005 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Black October 2026</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+/* Layout: deck em tela cheia; cada slide é uma "ficha de alerta" com texto à esquerda e um instrumento animado (relógio, contador, muralha) à direita; empilha no celular */
+:root {
+  --bg: #eef0f3;        /* cinza frio de sala de monitoramento */
+  --surface: #ffffff;
+  --fg: #151a22;
+  --muted: #59626f;
+  --line: #cdd3db;
+  --alert: #b42318;     /* alarme: o risco */
+  --amber: #e0a100;     /* faixa de perigo, usada só nas aberturas de ato */
+  --ok: #2f7d5b;
+  --info: #2c5d8f;      /* dado neutro, comparação */
+  --font-display: "Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Public Sans", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1319; --surface: #171d26; --fg: #e6eaf0; --muted: #9aa4b2; --line: #2a3340;
+    --alert: #ff6b57; --amber: #ffc23d; --ok: #4cc38a; --info: #6aa7e6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1319; --surface: #171d26; --fg: #e6eaf0; --muted: #9aa4b2; --line: #2a3340;
+  --alert: #ff6b57; --amber: #ffc23d; --ok: #4cc38a; --info: #6aa7e6;
+  color-scheme: dark;
+}
+
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 17px; line-height: 1.5; }
+
+.deck { position: fixed; inset: 0; overflow: hidden; background: var(--bg); padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.slide {
+  position: absolute; inset: 0 0 56px 0; overflow-y: auto;
+  padding-block: clamp(20px, 5vh, 56px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px), 5vw);
+  padding-right: max(16px, env(safe-area-inset-right, 0px), 5vw);
+  display: grid; align-content: center; gap: clamp(14px, 2.6vh, 28px);
+  opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility .35s;
+}
+.slide.active { opacity: 1; visibility: visible; }
+
+.eyebrow { font-family: var(--font-mono); font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--alert); margin: 0; }
+h1, h2, .display { font-family: var(--font-display); font-stretch: 72%; font-weight: 850; letter-spacing: -.01em; line-height: 1; margin: 0; text-wrap: balance; text-transform: uppercase; }
+h1 { font-size: clamp(3rem, 10vw, 8.5rem); }
+h2 { font-size: clamp(2rem, 4.6vw, 3.9rem); }
+h3 { font-family: var(--font-display); font-stretch: 85%; font-weight: 750; font-size: 1.25rem; margin: 0; }
+p { margin: 0; max-width: 64ch; }
+.lead { font-size: clamp(1.08rem, 1.7vw, 1.4rem); color: var(--muted); }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.hl { color: var(--alert); }
+.src { font-size: .76rem; color: var(--muted); font-family: var(--font-mono); max-width: none; }
+.src a { color: inherit; }
+
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: clamp(20px, 4vw, 56px); align-items: center; }
+.split > *, .cols-2 > *, .cols-3 > *, .cols-5 > * { min-width: 0; }
+.stack { display: grid; gap: 14px; align-content: start; }
+.cols-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.cols-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.cols-5 { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 900px) {
+  .split, .cols-2, .cols-3, .cols-5 { grid-template-columns: minmax(0, 1fr); }
+  .slide { align-content: start; }
+}
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 18px; }
+.stat { display: grid; gap: 2px; }
+.stat b { font-family: var(--font-display); font-stretch: 72%; font-size: clamp(2rem, 4vw, 3.4rem); font-weight: 850; line-height: 1; font-variant-numeric: tabular-nums; }
+.stat span { color: var(--muted); font-size: .92rem; }
+.stat.alert b { color: var(--alert); }
+ul.plain { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+ul.plain li { padding-left: 20px; position: relative; max-width: 62ch; }
+ul.plain li::before { content: ""; position: absolute; left: 0; top: .62em; width: 10px; height: 3px; background: var(--alert); }
+
+/* faixa de perigo: só nas aberturas de ato */
+.hazard { height: 14px; border-radius: 2px; background: repeating-linear-gradient(-45deg, var(--amber) 0 16px, var(--fg) 16px 32px); max-width: 420px; }
+.act-num { font-family: var(--font-mono); font-size: .9rem; color: var(--muted); letter-spacing: .1em; }
+
+blockquote.big { margin: 0; font-family: var(--font-display); font-stretch: 80%; font-weight: 800; font-size: clamp(1.7rem, 3.8vw, 3.1rem); line-height: 1.08; max-width: 24ch; text-wrap: balance; }
+blockquote.big em { font-style: normal; color: var(--alert); }
+.analogy { border-left: 4px solid var(--amber); padding: 6px 0 6px 16px; display: grid; gap: 6px; }
+.analogy .tag { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.analogy p { font-size: clamp(1.05rem, 1.6vw, 1.3rem); }
+
+/* SVG */
+svg.diagram { width: 100%; height: auto; max-height: 60vh; display: block; overflow: visible; }
+.node { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+.wire { fill: none; stroke: var(--line); stroke-width: 2; }
+.t { fill: var(--fg); font-family: var(--font-body); font-size: 14px; }
+.t-b { fill: var(--fg); font-family: var(--font-display); font-stretch: 80%; font-weight: 800; font-size: 18px; }
+.t-mono { fill: var(--fg); font-family: var(--font-mono); font-size: 12px; }
+.t-muted { fill: var(--muted); font-family: var(--font-mono); font-size: 11px; }
+.t-alert { fill: var(--alert); font-family: var(--font-mono); font-size: 12px; font-weight: 700; }
+.f-alert { fill: var(--alert); }
+.f-amber { fill: var(--amber); }
+.f-info { fill: var(--info); }
+.f-ok { fill: var(--ok); }
+.f-fg { fill: var(--fg); }
+.s-alert { stroke: var(--alert); }
+.s-fg { stroke: var(--fg); }
+.wall { fill: var(--surface); stroke: var(--fg); stroke-width: 2; }
+.gate { fill: var(--bg); stroke: var(--alert); stroke-width: 2; }
+
+/* barras horizontais */
+.hbars { display: grid; gap: 12px; }
+.hbar { display: grid; grid-template-columns: minmax(7rem, 11rem) minmax(0, 1fr) minmax(5.5rem, auto); gap: 12px; align-items: center; font-size: .95rem; }
+.hbar .track { height: 18px; background: color-mix(in srgb, var(--line) 60%, transparent); border-radius: 3px; overflow: hidden; }
+.hbar .fill { height: 100%; width: 0; background: var(--info); border-radius: 3px; }
+.hbar.hot .fill { background: var(--alert); }
+.hbar .v { font-family: var(--font-mono); text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; }
+
+/* enquete */
+.poll { display: grid; gap: 10px; }
+.opt { display: grid; grid-template-columns: minmax(6rem, 17rem) minmax(0, 1fr) 2.6rem; gap: 12px; align-items: center; text-align: left;
+  font: inherit; color: var(--fg); background: var(--surface); border: 1.5px solid var(--line); border-radius: 6px; padding: 10px 14px; cursor: pointer; }
+.opt:hover { border-color: var(--fg); }
+.opt .lbl { font-weight: 600; }
+.opt .track { height: 12px; background: color-mix(in srgb, var(--line) 60%, transparent); border-radius: 3px; overflow: hidden; }
+.opt .track i { display: block; height: 100%; width: 0; background: var(--info); transition: width .3s ease; }
+.opt .n { font-family: var(--font-mono); text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; }
+.opt.correct { border-color: var(--alert); border-width: 2.5px; }
+.opt.correct .lbl::after { content: "  ← resposta"; color: var(--alert); font-family: var(--font-mono); font-size: .78rem; }
+.ctl { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.btn { font: inherit; font-size: .9rem; font-weight: 600; background: var(--fg); color: var(--bg); border: 0; border-radius: 6px; padding: 9px 16px; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--fg); border: 1.5px solid var(--line); }
+.btn:hover { opacity: .88; }
+.hint { font-family: var(--font-mono); font-size: .74rem; color: var(--muted); }
+.reveal { display: grid; gap: 12px; }
+.qbox { display: grid; gap: 8px; }
+.question { font-family: var(--font-display); font-stretch: 78%; font-weight: 800; font-size: clamp(1.6rem, 3.4vw, 2.8rem); line-height: 1.08; max-width: 28ch; text-wrap: balance; }
+.qtag { display: inline-block; font-family: var(--font-mono); font-size: .78rem; font-weight: 700; color: var(--bg); background: var(--alert); padding: 3px 10px; border-radius: 3px; letter-spacing: .08em; justify-self: start; }
+
+/* mãos levantadas */
+.hands { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.hands b { font-family: var(--font-display); font-stretch: 72%; font-size: clamp(3rem, 6vw, 5rem); font-weight: 900; min-width: 2.2ch; text-align: center; font-variant-numeric: tabular-nums; }
+.round { width: 48px; height: 48px; border-radius: 50%; font-size: 1.4rem; padding: 0; }
+
+/* grade de quadrados (proporção) */
+.grid100 { display: grid; grid-template-columns: repeat(20, minmax(0, 1fr)); gap: 4px; max-width: 520px; }
+.grid100 i { aspect-ratio: 1; border-radius: 2px; background: var(--ok); display: block; }
+.grid100 i.open { background: var(--alert); }
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: .88rem; color: var(--muted); }
+.legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; background: var(--c); }
+
+/* portas */
+.door { display: grid; gap: 8px; padding: 14px; border: 1.5px solid var(--line); border-radius: 6px; background: var(--surface); }
+.door .k { font-family: var(--font-mono); font-size: .74rem; color: var(--alert); letter-spacing: .1em; text-transform: uppercase; }
+.door b { font-family: var(--font-display); font-stretch: 82%; font-size: 1.1rem; line-height: 1.15; }
+.door span { font-size: .86rem; color: var(--muted); }
+.case { display: grid; gap: 10px; }
+.case .why { border-top: 1px solid var(--line); padding-top: 10px; }
+.tagline { font-family: var(--font-mono); font-size: .8rem; color: var(--muted); }
+
+.combo { display: grid; gap: 6px; padding: 14px; border-top: 3px solid var(--fg); background: var(--surface); border-radius: 0 0 6px 6px; }
+.combo .n { font-family: var(--font-mono); font-size: .76rem; color: var(--alert); }
+.combo b { font-family: var(--font-display); font-stretch: 82%; font-size: 1.15rem; line-height: 1.15; }
+.combo span { font-size: .88rem; color: var(--muted); }
+.combo em { font-style: normal; font-size: .82rem; color: var(--fg); }
+
+.flag { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 14px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.flag .lv { font-family: var(--font-mono); font-size: .76rem; font-weight: 700; color: var(--alert); }
+
+/* notas do apresentador */
+.notes { display: none; }
+#notes-panel { position: absolute; left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); bottom: 64px; max-height: 42vh; overflow-y: auto;
+  background: var(--surface); border: 1.5px solid var(--fg); border-radius: 6px; padding: 14px 18px; font-size: .95rem; z-index: 5; box-shadow: 0 10px 30px color-mix(in srgb, var(--fg) 18%, transparent); }
+#notes-panel h4 { margin: 0 0 6px; font-family: var(--font-mono); font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--alert); }
+#notes-panel p { margin: 0 0 6px; }
+
+/* navegação */
+.nav { position: absolute; left: 0; right: 0; bottom: 0; height: 56px; display: flex; align-items: center; gap: 10px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px), 5vw); padding-right: max(16px, env(safe-area-inset-right, 0px), 5vw);
+  border-top: 1px solid var(--line); background: var(--bg); }
+.nav button { font: inherit; font-size: .88rem; background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+.nav button:hover { border-color: var(--alert); }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--alert); outline-offset: 2px; }
+.nav .count { font-family: var(--font-mono); font-size: .85rem; color: var(--muted); font-variant-numeric: tabular-nums; min-width: 4.5rem; }
+.nav .progress { flex: 1; height: 3px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.nav .progress i { display: block; height: 100%; width: 0; background: var(--alert); transition: width .35s ease; }
+.nav .title { font-family: var(--font-mono); font-size: .76rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 28vw; }
+@media (max-width: 640px) { .nav .title, .nav .fs, .nav .nt { display: none; } }
+@media (prefers-reduced-motion: reduce) { .slide { transition: none; } .opt .track i { transition: none; } }
+</style>
+
+<div class="deck" id="deck">
+
+<!-- 1 · Capa -->
+<section class="slide active" id="capa" data-anim="cover" data-title="Capa">
+  <div class="split">
+    <div class="stack">
+      <p class="eyebrow">Cyber Security · Outubro de 2026</p>
+      <h1>Black<br>October</h1>
+      <p class="lead">O mês em que o tempo entre uma falha ser conhecida e ser atacada caiu de semanas para horas. E o que isso muda no nosso backlog.</p>
+      <p class="src">Apresentação participativa · cerca de 50 min · ← → para navegar · N abre as notas</p>
+    </div>
+    <svg class="diagram" viewBox="0 0 400 400" role="img" aria-label="Relógio com o ponteiro girando cada vez mais rápido">
+      <circle cx="200" cy="200" r="170" class="node" stroke-width="3"/>
+      <g id="cover-ticks"></g>
+      <line id="cover-hand" x1="200" y1="200" x2="200" y2="58" class="s-alert" stroke-width="7" stroke-linecap="round"/>
+      <line id="cover-hand2" x1="200" y1="200" x2="200" y2="105" class="s-fg" stroke-width="9" stroke-linecap="round"/>
+      <circle cx="200" cy="200" r="11" class="f-fg"/>
+      <text class="t-muted" x="200" y="300" text-anchor="middle">semanas → horas</text>
+    </svg>
+  </div>
+  <aside class="notes"><p>Deixe a capa no ar enquanto o público entra. O ponteiro acelerando é a metáfora da apresentação inteira: o relógio do atacante ficou mais rápido que o nosso.</p></aside>
+</section>
+
+<!-- 2 · Abertura -->
+<section class="slide" id="abertura" data-anim="opening" data-title="Ato 1 · Abertura">
+  <p class="act-num">Ato 1 · Abertura</p>
+  <div class="split">
+    <div class="stack">
+      <p class="display mono hl" id="op-clock" style="font-family: var(--font-mono); font-stretch: 100%; font-size: clamp(2.6rem, 7vw, 5.6rem); letter-spacing: -.02em;">12h15</p>
+      <h2>Quarta-feira, 21 de outubro</h2>
+      <p class="lead">A Anatel tira do ar o SEI, o sistema onde tramitam seus processos. Ele só volta às 22h05. No mesmo dia, o SEI sai do ar em agências, ministérios e tribunais.</p>
+      <p class="display" style="font-size: clamp(1.6rem, 3vw, 2.4rem); text-transform: none; font-stretch: 85%;">O detalhe: <span class="hl">ninguém tinha sido invadido.</span></p>
+    </div>
+    <div class="cols-3 orgs">
+      <div class="panel stack"><h3>Agências</h3><p class="mono muted">ANATEL<br>ANP<br>ANEEL<br>ANTAQ<br>ANM</p></div>
+      <div class="panel stack"><h3>Ministérios e órgãos</h3><p class="mono muted">Minas e Energia<br>Meio Ambiente<br>AGU<br>Ibama</p></div>
+      <div class="panel stack"><h3>Tribunais</h3><p class="mono muted">TRF-1<br>TRF-4<br>TRF-6</p></div>
+    </div>
+  </div>
+  <p class="src">Fontes: Contábeis (23/10), Agência iNFRA (22/10), O Tempo (22/10). Medida preventiva por orientação do CTIR Gov e do Governo Digital.</p>
+  <aside class="notes"><p>Conte como uma cena, devagar. Não diga que o governo foi hackeado: a Anatel informou que não houve intrusão.</p><p>O GOV.BR não foi afetado.</p></aside>
+</section>
+
+<!-- 3 · P1 -->
+<section class="slide" id="p1" data-anim="question" data-title="P1 · Por que desligar?">
+  <div class="qbox">
+    <span class="qtag">PERGUNTA 1 · mão levantada</span>
+    <p class="question">Por que um órgão tiraria o próprio sistema do ar sem ter sido atacado?</p>
+  </div>
+  <div class="ctl"><button class="btn" data-reveal>Revelar</button><span class="hint">ou tecla R · ouça 3 ou 4 respostas antes</span></div>
+  <div class="reveal" hidden>
+    <div class="split">
+      <div class="analogy"><span class="tag">Analogia</span><p>É o alarme de gás de um prédio. Ninguém espera a explosão para evacuar.</p></div>
+      <p class="lead">Na véspera, o mundo descobriu que uma peça usada em cerca de 70% dos sites tinha uma falha grave. E o tempo para consertar era menor do que o tempo para alguém explorar.</p>
+    </div>
+  </div>
+  <aside class="notes"><p>Pausa de 60 segundos. Escreva as palavras-chave das respostas num quadro, se houver.</p></aside>
+</section>
+
+<!-- 4 · Mapa -->
+<section class="slide" id="mapa" data-anim="agenda" data-title="O que vamos ver">
+  <p class="eyebrow">Roteiro de hoje</p>
+  <blockquote class="big">A IA não inventou falhas novas. Ela achou as antigas <em>mais rápido do que conseguimos consertá-las.</em></blockquote>
+  <div class="cols-5 agenda">
+    <div class="door"><span class="k">Ato 2</span><b>O que foi o Black October</b></div>
+    <div class="door"><span class="k">Ato 3</span><b>A IA mudou o relógio</b></div>
+    <div class="door"><span class="k">Ato 4</span><b>"Mas aqui dentro estamos seguros"</b></div>
+    <div class="door"><span class="k">Ato 5</span><b>Quem está atacando?</b></div>
+    <div class="door"><span class="k">Ato 6</span><b>O que muda no backlog</b></div>
+  </div>
+  <aside class="notes"><p>Leia a frase-âncora em voz alta. Ela volta no encerramento.</p></aside>
+</section>
+
+<!-- 5 · Ato 2 -->
+<section class="slide" id="ato2" data-anim="timeline" data-title="Ato 2 · O que foi">
+  <div class="hazard"></div>
+  <p class="act-num">Ato 2</p>
+  <h2>Uma semana, muitas falhas, todas ao mesmo tempo</h2>
+  <p class="lead">Foi uma onda de divulgações, não um ataque coordenado. Entre 19 e 22 de outubro, quase toda grande linguagem e plataforma teve um alerta.</p>
+  <svg class="diagram" viewBox="0 0 900 250" role="img" aria-label="Linha do tempo de 19 a 22 de outubro com os principais alertas">
+    <line x1="40" y1="120" x2="870" y2="120" class="wire" stroke-width="3"/>
+    <g class="tl-days">
+      <text class="t-b" x="80" y="38" text-anchor="middle">19/10</text>
+      <text class="t-b" x="320" y="38" text-anchor="middle">20/10</text>
+      <text class="t-b" x="580" y="38" text-anchor="middle">21/10</text>
+      <text class="t-b" x="820" y="38" text-anchor="middle">22/10</text>
+    </g>
+    <g class="tl-ev">
+      <circle cx="80" cy="120" r="9" class="f-info"/><text class="t-mono" x="80" y="160" text-anchor="middle">OVHcloud CLI</text><text class="t-muted" x="80" y="176" text-anchor="middle">Go · binários trocados</text>
+      <circle cx="270" cy="120" r="9" class="f-info"/><text class="t-mono" x="270" y="90" text-anchor="middle">Go</text><text class="t-muted" x="270" y="74" text-anchor="middle">bloqueio eMudhra</text>
+      <circle cx="370" cy="120" r="9" class="f-info"/><text class="t-mono" x="370" y="160" text-anchor="middle">Java</text><text class="t-muted" x="370" y="176" text-anchor="middle">CPU trimestral</text>
+      <circle cx="500" cy="120" r="13" class="f-alert"/><text class="t-alert" x="500" y="90" text-anchor="middle">PHP2Shell</text><text class="t-muted" x="500" y="74" text-anchor="middle">PHP · 70% dos sites</text>
+      <circle cx="560" cy="120" r="9" class="f-alert"/><text class="t-mono" x="560" y="160" text-anchor="middle">Node.js</text><text class="t-muted" x="560" y="176" text-anchor="middle">10 falhas</text>
+      <circle cx="620" cy="120" r="9" class="f-alert"/><text class="t-mono" x="640" y="90" text-anchor="middle">GitLab · nota 10</text>
+      <circle cx="680" cy="120" r="9" class="f-alert"/><text class="t-mono" x="690" y="208" text-anchor="middle">LiteLLM · Python</text><text class="t-muted" x="690" y="224" text-anchor="middle">pacote contaminado</text>
+      <circle cx="740" cy="120" r="9" class="f-info"/><text class="t-mono" x="760" y="160" text-anchor="middle">Python e Java</text><text class="t-muted" x="760" y="176" text-anchor="middle">certificados de emergência</text>
+    </g>
+  </svg>
+  <aside class="notes"><p>Não entre em detalhe técnico. A mensagem é a densidade: tudo na mesma semana. Os três próximos slides contam três histórias.</p></aside>
+</section>
+
+<!-- 6 · P2 -->
+<section class="slide" id="p2" data-anim="question" data-title="P2 · Quanto da web é PHP?">
+  <div class="qbox">
+    <span class="qtag">PERGUNTA 2 · enquete</span>
+    <p class="question">Que fatia dos sites do mundo vocês acham que roda PHP?</p>
+  </div>
+  <div class="poll" data-answer="3">
+    <button class="opt" type="button"><span class="lbl">10%</span><span class="track"><i></i></span><span class="n">0</span></button>
+    <button class="opt" type="button"><span class="lbl">30%</span><span class="track"><i></i></span><span class="n">0</span></button>
+    <button class="opt" type="button"><span class="lbl">50%</span><span class="track"><i></i></span><span class="n">0</span></button>
+    <button class="opt" type="button"><span class="lbl">70%</span><span class="track"><i></i></span><span class="n">0</span></button>
+  </div>
+  <div class="ctl"><button class="btn" data-reveal>Revelar</button><button class="btn ghost" data-reset>Zerar</button><span class="hint">clique numa opção para somar um voto · Shift+clique tira</span></div>
+  <div class="reveal" hidden>
+    <div class="stat alert"><b data-count="70" data-suffix="%">70%</b><span>dos sites cuja linguagem de servidor é conhecida usam PHP (W3Techs, via Cloudflare e Reuters)</span></div>
+  </div>
+  <aside class="notes"><p>Pausa de 30 segundos. Conte as mãos por opção e clique na opção para registrar.</p></aside>
+</section>
+
+<!-- 7 · PHP2Shell -->
+<section class="slide" id="php" data-anim="php" data-title="História 1 · PHP2Shell">
+  <p class="eyebrow">História 1 · PHP2Shell</p>
+  <div class="split">
+    <div class="stack">
+      <h2>A fechadura de 12 anos</h2>
+      <div class="analogy"><span class="tag">Analogia</span><p>Um modelo de fechadura instalado em 7 de cada 10 prédios abre com um grampo. O manual de como abrir vaza um dia antes de a fechadura nova chegar.</p></div>
+      <p>Duas falhas no PHP, presentes desde a versão 5.4, de 2012, permitem que qualquer pessoa na internet execute comandos no servidor, sem login. A correção saiu em 21/10, um dia depois do vazamento.</p>
+      <p class="src">Fontes: Wikipedia “PHP2Shell”; The Hacker News; The Register; Cloudflare via GIGAZINE</p>
+    </div>
+    <div class="stack">
+      <p class="mono muted">Tentativas de ataque vistas pela Cloudflare</p>
+      <div class="hbars">
+        <div class="hbar"><span>10h antes do anúncio</span><div class="track"><div class="fill" data-w="25%"></div></div><span class="v">milhares</span></div>
+        <div class="hbar"><span>45 min depois</span><div class="track"><div class="fill" data-w="50%"></div></div><span class="v">dezenas de mil</span></div>
+        <div class="hbar"><span>2 horas depois</span><div class="track"><div class="fill" data-w="75%"></div></div><span class="v">centenas de mil</span></div>
+        <div class="hbar hot"><span>cerca de 12h depois</span><div class="track"><div class="fill" data-w="100%"></div></div><span class="v">milhões</span></div>
+      </div>
+      <p class="src">escala logarítmica: cada degrau é 10 vezes o anterior</p>
+      <div class="panel stat alert"><b>4 dias antes</b><span>a Amazon registrou a primeira tentativa de ataque, ainda sob sigilo</span></div>
+    </div>
+  </div>
+  <aside class="notes"><p>Dado-surpresa: o ataque começou antes do anúncio. O bug já tinha sido visto em 2024 e ficou sem correção.</p></aside>
+</section>
+
+<!-- 8 · eMudhra -->
+<section class="slide" id="emudhra" data-anim="stamp" data-title="História 2 · eMudhra">
+  <p class="eyebrow">História 2 · eMudhra</p>
+  <div class="split">
+    <div class="stack">
+      <h2>O cartório com carimbo falsificável</h2>
+      <div class="analogy"><span class="tag">Analogia</span><p>O cadeado do navegador funciona como um reconhecimento de firma. Um cartório indiano usava carimbos tão simples que qualquer um podia copiar.</p></div>
+      <p>Oito certificados intermediários da eMudhra tinham chaves triviais. Com elas, seria possível criar um site falso com cadeado verde se passando por qualquer outro.</p>
+      <p class="src">Fontes: Forkast/Yahoo; LinuxCompatible; Outpost24; Oracle Security Alert CVE-2026-91403</p>
+    </div>
+    <div class="stack">
+      <svg class="diagram" viewBox="0 0 420 200" role="img" aria-label="A chave secreta de um dos carimbos era o número 4">
+        <rect x="20" y="20" width="380" height="160" rx="8" class="node"/>
+        <text class="t-muted" x="44" y="56">chave secreta de um dos carimbos</text>
+        <text id="key-digits" class="t-b" x="44" y="126" style="font-family: var(--font-mono); font-size: 54px; font-weight: 700;">4</text>
+        <text class="t-alert" x="44" y="160">esperado: um número com centenas de dígitos</text>
+      </svg>
+      <div class="cols-2">
+        <div class="panel stack"><h3>Quem precisou corrigir</h3><p class="muted">Navegadores, Python, Go, Java e Node.js, em atualizações de emergência.</p></div>
+        <div class="panel stack"><h3 class="hl">Pegadinha do Java</h3><p class="muted">Aplicar a atualização trimestral de 20/10 não bastava. Foi preciso outra, publicada no dia seguinte.</p></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><p>Guarde a pegadinha do Java: ela volta no Ato 4, porta 4.</p></aside>
+</section>
+
+<!-- 9 · Supply chain -->
+<section class="slide" id="suprimentos" data-anim="supply" data-title="História 3 · Suprimentos">
+  <p class="eyebrow">História 3 · Cadeia de suprimentos</p>
+  <div class="split">
+    <div class="stack">
+      <h2>O ingrediente contaminado</h2>
+      <div class="analogy"><span class="tag">Analogia</span><p>Uma fábrica pode ter a cozinha mais limpa do mundo. Se o fornecedor de farinha estiver contaminado, o bolo sai contaminado.</p></div>
+      <ul class="plain">
+        <li><b>LiteLLM</b> (Python, usada em projetos de IA): versão oficial publicada com programa ladrão de senhas.</li>
+        <li><b>Plugins de WordPress</b> (Rank Math, UpdraftCentral): atualizações com porta dos fundos.</li>
+        <li><b>OVHcloud CLI</b> (Go): arquivos de instalação trocados por cerca de 94 minutos.</li>
+        <li><b>Pacotes npm</b> (JavaScript): worm que se republica sozinho.</li>
+      </ul>
+      <p class="src">Fontes: Agentbeam (tracker de outubro); Microsoft Security Blog; SecurityToday</p>
+    </div>
+    <svg class="diagram" viewBox="0 0 440 300" role="img" aria-label="Um fornecedor contaminado leva o problema para dentro de uma fábrica limpa">
+      <rect x="10" y="110" width="120" height="80" rx="8" class="node"/><text class="t" x="70" y="146" text-anchor="middle">fornecedor</text><text class="t-muted" x="70" y="166" text-anchor="middle">pacote, plugin</text>
+      <rect x="250" y="40" width="180" height="220" rx="8" class="node" stroke-width="2.5"/>
+      <text class="t-b" x="340" y="74" text-anchor="middle">sua empresa</text>
+      <text class="t-muted" x="340" y="94" text-anchor="middle">ambiente "limpo"</text>
+      <rect x="280" y="120" width="120" height="34" rx="6" class="node"/><text class="t-mono" x="340" y="142" text-anchor="middle">notebook do dev</text>
+      <rect x="280" y="166" width="120" height="34" rx="6" class="node"/><text class="t-mono" x="340" y="188" text-anchor="middle">esteira de build</text>
+      <rect x="280" y="212" width="120" height="34" rx="6" class="node"/><text class="t-mono" x="340" y="234" text-anchor="middle">produção</text>
+      <path d="M130 150 L250 150" class="wire" stroke-width="3"/>
+      <circle id="sup-dot" cx="130" cy="150" r="9" class="f-alert"/>
+    </svg>
+  </div>
+  <aside class="notes"><p>Pergunte: “quem aqui sabe quantas bibliotecas de terceiros o sistema da sua squad usa?”. Não espere resposta, só plante a dúvida.</p></aside>
+</section>
+
+<!-- 10 · Ato 3 + P3 -->
+<section class="slide" id="ato3" data-anim="question" data-title="Ato 3 · P3 falhas publicadas">
+  <div class="hazard"></div>
+  <p class="act-num">Ato 3 · A IA mudou o relógio</p>
+  <div class="qbox">
+    <span class="qtag">PERGUNTA 3 · enquete</span>
+    <p class="question">Quantas falhas de segurança novas foram publicadas no mundo só em outubro, até o dia 25?</p>
+  </div>
+  <div class="poll" data-answer="3">
+    <button class="opt" type="button"><span class="lbl">500</span><span class="track"><i></i></span><span class="n">0</span></button>
+    <button class="opt" type="button"><span class="lbl">2 mil</span><span class="track"><i></i></span><span class="n">0</span></button>
+    <button class="opt" type="button"><span class="lbl">5 mil</span><span class="track"><i></i></span><span class="n">0</span></button>
+    <button class="opt" type="button"><span class="lbl">Mais de 10 mil</span><span class="track"><i></i></span><span class="n">0</span></button>
+  </div>
+  <div class="ctl"><button class="btn" data-reveal>Revelar</button><button class="btn ghost" data-reset>Zerar</button><span class="hint">tecla R revela</span></div>
+  <div class="reveal" hidden>
+    <div class="hbars">
+      <div class="hbar"><span>Outubro de 2025</span><div class="track"><div class="fill" data-w="31.5%"></div></div><span class="v">4.389</span></div>
+      <div class="hbar hot"><span>Outubro de 2026 (até dia 25)</span><div class="track"><div class="fill" data-w="100%"></div></div><span class="v" data-count="13934">13.934</span></div>
+    </div>
+    <p class="lead">3,2 vezes mais. Em 2026 já são 88.772, 78% a mais que todo o ano de 2025. Só a Microsoft corrigiu cerca de 1.415 num único dia, 13/10.</p>
+    <p class="src">Fonte: análise de dados da NVD até 25/10/2026 (1023 Jack / ThorstenMeyerAI); ZDI</p>
+  </div>
+  <aside class="notes"><p>Pausa de 60 segundos. Quase ninguém chuta “mais de 10 mil”: use isso.</p></aside>
+</section>
+
+<!-- 11 · Detector de metais -->
+<section class="slide" id="detector" data-anim="grid" data-title="Descobrir: detector de metais">
+  <p class="eyebrow">Lado 1 · Descobrir</p>
+  <div class="split">
+    <div class="stack">
+      <h2>O detector de metais na praia</h2>
+      <div class="analogy"><span class="tag">Analogia</span><p>Durante anos, procurávamos moedas na areia com as mãos. A IA varre a praia inteira numa tarde e acha moedas enterradas há 10, 20 anos.</p></div>
+      <ul class="plain">
+        <li>A equipe da OpenAI chega a achar <b>cerca de 100 falhas por dia</b>.</li>
+        <li>Os parceiros da Anthropic verificaram <b>mais de 129 mil</b> entre abril e julho.</li>
+        <li>O PHP2Shell foi transformado em ataque com ajuda de um modelo de IA (GPT-5.6 Sol).</li>
+      </ul>
+      <p class="src">Fontes: Forbes (23/10); Reuters via GBM (06/10); Wikipedia “PHP2Shell”</p>
+    </div>
+    <div class="stack">
+      <p class="mono muted">Patch the Planet (OpenAI + Trail of Bits): 1.995 falhas encontradas</p>
+      <div class="grid100" id="grid100"></div>
+      <div class="legend"><span style="--c: var(--alert)">sem correção · 1.316 (66%)</span><span style="--c: var(--ok)">corrigidas · 679</span></div>
+      <div class="panel"><p><b>O gargalo mudou de lugar.</b> Antes era descobrir. Agora é corrigir: o detector achou mil moedas, mas só temos duas pessoas para cavar.</p></div>
+    </div>
+  </div>
+  <aside class="notes"><p>Exemplos do gargalo: o PostgreSQL 19 foi adiado porque a IA achou mais bugs do que o time conseguia corrigir; o curl mudou sua política por excesso de relatórios.</p><p>Cada quadrado vale cerca de 20 falhas.</p></aside>
+</section>
+
+<!-- 12 · Estagiário + P4 -->
+<section class="slide" id="estagiario" data-anim="question" data-title="Atacar: estagiário incansável">
+  <p class="eyebrow">Lado 2 · Atacar</p>
+  <div class="split">
+    <div class="stack">
+      <h2>O estagiário que nunca dorme</h2>
+      <div class="analogy"><span class="tag">Analogia</span><p>Um estagiário que testa 2.900 portas por minuto, escreve as próprias ferramentas e custa o preço de uma pizza.</p></div>
+      <div class="cols-2">
+        <div class="stat"><b>&lt; 3h</b><span>para o grupo Storm-0940 chegar a acesso privilegiado na nuvem, com agentes de IA</span></div>
+        <div class="stat"><b>100+</b><span>empresas invadidas por agentes na plataforma Cairn, incluindo John Deere e SharkNinja</span></div>
+      </div>
+      <p class="src">Fontes: Microsoft via GCN (24/10); NorForge e Reuters via VibeIncidents</p>
+    </div>
+    <div class="stack">
+      <div class="qbox"><span class="qtag">PERGUNTA 4 · enquete</span><p class="question" style="font-size: clamp(1.3rem, 2.4vw, 2rem);">Quanto custou, em IA, cada invasão bem-sucedida da Cairn?</p></div>
+      <div class="poll" data-answer="0">
+        <button class="opt" type="button"><span class="lbl">US$ 50</span><span class="track"><i></i></span><span class="n">0</span></button>
+        <button class="opt" type="button"><span class="lbl">US$ 5 mil</span><span class="track"><i></i></span><span class="n">0</span></button>
+        <button class="opt" type="button"><span class="lbl">US$ 50 mil</span><span class="track"><i></i></span><span class="n">0</span></button>
+      </div>
+      <div class="ctl"><button class="btn" data-reveal>Revelar</button><button class="btn ghost" data-reset>Zerar</button></div>
+      <div class="reveal" hidden><div class="stat alert"><b>cerca de US$ 50</b><span>O custo do atacante despencou. O nosso custo de corrigir, não.</span></div></div>
+    </div>
+  </div>
+  <aside class="notes"><p>Cerca de US$ 5 mil em tokens no total, para mais de 100 invasões. A taxa de sucesso foi de cerca de 10%.</p></aside>
+</section>
+
+<!-- 13 · Contraponto e relógios -->
+<section class="slide" id="relogios" data-anim="clocks" data-title="O relógio mudou">
+  <p class="eyebrow">O que mudou de fato</p>
+  <h2>Não é a IA atacando sozinha. É a velocidade.</h2>
+  <div class="split">
+    <svg class="diagram" viewBox="0 0 520 260" role="img" aria-label="Dois relógios: antes, semanas; outubro de 2026, horas">
+      <circle cx="130" cy="120" r="96" class="node" stroke-width="2.5"/>
+      <line id="clk-slow" x1="130" y1="120" x2="130" y2="44" class="s-fg" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="130" cy="120" r="7" class="f-fg"/>
+      <text class="t-b" x="130" y="248" text-anchor="middle">Antes: semanas</text>
+      <circle cx="390" cy="120" r="96" class="node" stroke-width="2.5" style="stroke: var(--alert)"/>
+      <line id="clk-fast" x1="390" y1="120" x2="390" y2="44" class="s-alert" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="390" cy="120" r="7" class="f-alert"/>
+      <text class="t-b" x="390" y="248" text-anchor="middle" style="fill: var(--alert)">Out/2026: horas</text>
+    </svg>
+    <div class="stack">
+      <div class="stat alert"><b>3 dias</b><span>tempo médio até uma falha grave ser explorada depois de divulgada (71% em até 7 dias)</span></div>
+      <div class="stat"><b>8%</b><span>dos ataques acompanhados têm a IA como peça operacional. A maioria ainda é conduzida por humanos.</span></div>
+      <p class="src">Fonte: Rapid7, relatório trimestral (via IT Brief)</p>
+    </div>
+  </div>
+  <aside class="notes"><p>Este contraponto dá credibilidade com os técnicos da sala. Não venda pânico: venda velocidade.</p></aside>
+</section>
+
+<!-- 14 · Ato 4 abertura + P5 -->
+<section class="slide" id="ato4" data-anim="castle" data-title="Ato 4 · Castelo e cavalo de Troia">
+  <div class="hazard"></div>
+  <p class="act-num">Ato 4 · “Mas aqui dentro estamos seguros”</p>
+  <div class="split">
+    <div class="stack">
+      <h2>Troia não caiu pela muralha</h2>
+      <div class="analogy"><span class="tag">Analogia</span><p>Por séculos, a defesa foi muralha alta e fosso fundo. Troia caiu porque os próprios troianos puxaram o cavalo para dentro. Ambiente interno é a muralha. A pergunta é: o que puxamos para dentro todo dia?</p></div>
+      <div class="qbox"><span class="qtag">PERGUNTA 5 · mão levantada</span><p>Quem acha que um pacote instalado no notebook de um dev pode vazar as chaves da nuvem de produção?</p></div>
+      <div class="hands"><button class="btn ghost round" type="button" data-hand="-1" aria-label="Menos uma mão">−</button><b id="hands-n">0</b><button class="btn round" type="button" data-hand="1" aria-label="Mais uma mão">+</button><span class="hint">mãos levantadas</span></div>
+    </div>
+    <svg class="diagram" viewBox="0 0 460 320" role="img" aria-label="Muralha com cinco portas por onde entram ataques">
+      <rect x="20" y="40" width="420" height="250" rx="6" class="wall"/>
+      <text class="t-b" x="230" y="170" text-anchor="middle">ambiente interno</text>
+      <text class="t-muted" x="230" y="192" text-anchor="middle">a muralha está de pé</text>
+      <g class="gates">
+        <rect x="58" y="30" width="44" height="22" rx="3" class="gate"/><text class="t-alert" x="80" y="46" text-anchor="middle">1</text>
+        <rect x="148" y="30" width="44" height="22" rx="3" class="gate"/><text class="t-alert" x="170" y="46" text-anchor="middle">2</text>
+        <rect x="238" y="30" width="44" height="22" rx="3" class="gate"/><text class="t-alert" x="260" y="46" text-anchor="middle">3</text>
+        <rect x="328" y="30" width="44" height="22" rx="3" class="gate"/><text class="t-alert" x="350" y="46" text-anchor="middle">4</text>
+        <rect x="408" y="140" width="44" height="22" rx="3" class="gate"/><text class="t-alert" x="430" y="156" text-anchor="middle">5</text>
+      </g>
+      <g id="castle-dots"></g>
+    </svg>
+  </div>
+  <aside class="notes"><p>Conte as mãos com os botões + e −. O número aparece de novo no fechamento do ato.</p><p>A seguir, uma porta por slide.</p></aside>
+</section>
+
+<!-- 15–19 · As cinco portas -->
+<section class="slide" id="porta1" data-anim="door" data-title="Porta 1 · Ingrediente contaminado">
+  <p class="eyebrow">Porta 1 de 5 · Pacotes e bibliotecas</p>
+  <div class="split">
+    <div class="case">
+      <h2>O ingrediente contaminado</h2>
+      <p class="tagline">Analogia: farinha contaminada numa fábrica limpa</p>
+      <p><b>LiteLLM 1.107.0</b> (Python): o programa malicioso rodava toda vez que o Python iniciava, mesmo sem a biblioteca ser usada. Roubava chaves de nuvem, de IA e do navegador. Desinstalar não removia.</p>
+      <p><b>Shai-Hulud</b> (npm): um worm contaminou mais de 400 pacotes. Um deles tem 600 milhões de downloads por mês.</p>
+      <p class="why"><b>Por que “interno” não protege:</b> roda dentro da máquina do dev e da esteira de build, que têm acesso a tudo.</p>
+      <p class="src">Fontes: Microsoft Security Blog (23/10); Elastic Security Labs</p>
+    </div>
+    <div class="stat alert panel"><b>2 horas</b><span>foi o tempo em que a versão contaminada do LiteLLM ficou disponível. Bastou para quem instalou nesse intervalo.</span></div>
+  </div>
+</section>
+
+<section class="slide" id="porta2" data-anim="door" data-title="Porta 2 · Chave debaixo do tapete">
+  <p class="eyebrow">Porta 2 de 5 · Credenciais esquecidas</p>
+  <div class="split">
+    <div class="case">
+      <h2>A chave debaixo do tapete</h2>
+      <p class="tagline">Analogia: a chave reserva que todo mundo sabe onde fica e ninguém troca</p>
+      <p><b>Zeabur</b>: tokens de administrador sem validade, sem troca desde janeiro de 2024, levaram ao vazamento de 321.810 contas e ao fechamento da empresa.</p>
+      <p><b>LiteLLM</b>: uma chave vazada no GitHub em maio nunca foi revogada. Foi por ela que o ataque começou.</p>
+      <p class="why"><b>Por que “interno” não protege:</b> com uma credencial válida, o atacante parece um funcionário. Na Índia, nenhuma vítima percebeu o acesso de agentes de IA.</p>
+      <p class="src">Fontes: SecurityToday (22/10); Senthorus; CERT-In via Deccan Chronicle</p>
+    </div>
+    <div class="stat alert panel"><b data-count="321810">321.810</b><span>contas expostas na Zeabur por credenciais que nunca expiravam</span></div>
+  </div>
+</section>
+
+<section class="slide" id="porta3" data-anim="door" data-title="Porta 3 · Prestador com a chave">
+  <p class="eyebrow">Porta 3 de 5 · Terceiros integrados</p>
+  <div class="split">
+    <div class="case">
+      <h2>O prestador com a cópia da chave</h2>
+      <p class="tagline">Analogia: a empresa de limpeza com cópia da chave do escritório</p>
+      <p><b>ConnectWise Cloud Backup</b>: um grupo ligado à China usou o acesso do app de backup para entrar em ambientes Microsoft 365 de clientes.</p>
+      <p class="why"><b>Por que “interno” não protege:</b> o acesso vem de um app autorizado. Desligar o fornecedor “não remove o acesso já estabelecido” dentro de cada cliente.</p>
+      <p class="src">Fontes: Microsoft via Reuters/WHTC (21/10); GCN (24/10)</p>
+    </div>
+    <div class="stat alert panel"><b data-count="2250" data-suffix="+">2.250+</b><span>ambientes Microsoft 365 visados a partir de um único fornecedor</span></div>
+  </div>
+</section>
+
+<section class="slide" id="porta4" data-anim="door" data-title="Porta 4 · Carimbo falso">
+  <p class="eyebrow">Porta 4 de 5 · Confiança em certificados</p>
+  <div class="split">
+    <div class="case">
+      <h2>O carimbo falso</h2>
+      <p class="tagline">Analogia: o cartório que reconhece uma firma falsa</p>
+      <p><b>eMudhra e Java</b>: sistemas Java que chamam APIs por HTTPS poderiam aceitar um servidor falso. A atualização trimestral não bastava.</p>
+      <p><b>Python</b>: atualizar o sistema operacional não resolve, porque o instalador de pacotes (pip) traz a própria lista de certificados.</p>
+      <p class="why"><b>Por que “interno” não protege:</b> a confiança está embutida em cada aplicação e contêiner, e ninguém lembra que ela existe.</p>
+      <p class="src">Fontes: Oracle CVE-2026-91403 (21/10); LinuxCompatible; Outpost24</p>
+    </div>
+    <div class="stat alert panel"><b>9,1 de 10</b><span>foi a nota de gravidade da falha do Java (CVE-2026-91403)</span></div>
+  </div>
+</section>
+
+<section class="slide" id="porta5" data-anim="door" data-title="Porta 5 · Porta dos fundos">
+  <p class="eyebrow">Porta 5 de 5 · Ferramentas internas</p>
+  <div class="split">
+    <div class="case">
+      <h2>A porta dos fundos da oficina</h2>
+      <p class="tagline">Analogia: o depósito dos fundos que ninguém tranca porque “só entra funcionário”</p>
+      <p><b>GitLab self-managed</b>: falha com nota máxima em 12 anos de versões, que permite executar código sem login.</p>
+      <p><b>SEI</b>: é um sistema interno, mas tinha acesso externo. Por isso saiu do ar.</p>
+      <p class="why"><b>Por que “interno” não protege:</b> repositório de código, esteira de build e back-office são o cofre, e costumam ficar por último no backlog.</p>
+      <p class="src">Fontes: Zeli/GitLab (21/10); Agência iNFRA (22/10)</p>
+    </div>
+    <div class="stat alert panel"><b>10 de 10</b><span>nota de gravidade da falha do GitLab, presente desde a versão 7.0</span></div>
+  </div>
+</section>
+
+<!-- 20 · Fechamento Ato 4 -->
+<section class="slide" id="raiox" data-anim="raiox" data-title="Ato 4 · Raio-X da squad">
+  <p class="eyebrow">Fechamento do Ato 4</p>
+  <div class="split">
+    <div class="stack">
+      <p class="lead">Vocês levantaram <b class="hl" id="hands-back">0</b> mãos. A resposta é sim, e aconteceu este mês.</p>
+      <blockquote class="big">Interno não é sinônimo de protegido. É sinônimo de <em>confiável</em>, e é a confiança que está sendo explorada.</blockquote>
+    </div>
+    <div class="panel stack">
+      <h3>Raio-X da squad · 3 minutos</h3>
+      <p class="muted">Escolha um sistema que você gerencia e responda mentalmente:</p>
+      <ul class="plain">
+        <li>Sei quais bibliotecas ele usa?</li>
+        <li>Sei quando as credenciais dele foram trocadas pela última vez?</li>
+        <li>Sei quais terceiros têm acesso a ele?</li>
+      </ul>
+      <p><b>Quem respondeu “não sei” a alguma delas acabou de achar um item de backlog.</b></p>
+    </div>
+  </div>
+  <aside class="notes"><p>A dinâmica é opcional. Use se o grupo estiver engajado.</p></aside>
+</section>
+
+<!-- 21 · Ato 5 · P6 -->
+<section class="slide" id="ato5" data-anim="question" data-title="Ato 5 · Quem ataca?">
+  <div class="hazard"></div>
+  <p class="act-num">Ato 5 · Quem está atacando?</p>
+  <div class="qbox">
+    <span class="qtag">PERGUNTA 6 · enquete</span>
+    <p class="question">Qual país vocês acham que mais atacou no Black October?</p>
+  </div>
+  <div class="poll" data-answer="4">
+    <button class="opt" type="button"><span class="lbl">China</span><span class="track"><i></i></span><span class="n">0</span></button>
+    <button class="opt" type="button"><span class="lbl">Rússia</span><span class="track"><i></i></span><span class="n">0</span></button>
+    <button class="opt" type="button"><span class="lbl">Coreia do Norte</span><span class="track"><i></i></span><span class="n">0</span></button>
+    <button class="opt" type="button"><span class="lbl">Irã</span><span class="track"><i></i></span><span class="n">0</span></button>
+    <button class="opt" type="button"><span class="lbl">Nenhum em particular</span><span class="track"><i></i></span><span class="n">0</span></button>
+  </div>
+  <div class="ctl"><button class="btn" data-reveal>Revelar</button><button class="btn ghost" data-reset>Zerar</button></div>
+  <div class="reveal" hidden>
+    <div class="cols-3">
+      <div class="flag"><span class="lv">CAMADA 1</span><span><b>A maior parte não tem dono.</b> Milhões de tentativas de endereços anônimos, de “múltiplos atacantes, não um único grupo” (Amazon).</span></div>
+      <div class="flag"><span class="lv">CAMADA 2</span><span><b>China é a atribuição mais citada.</b> A Microsoft ligou o caso ConnectWise a um grupo alinhado ao governo chinês, com agentes de IA.</span></div>
+      <div class="flag"><span class="lv">CAMADA 3</span><span><b>Coreia do Norte é suspeita</b>, com confiança moderada. Rússia e Irã: nada relevante ligado ao Black October.</span></div>
+    </div>
+    <div class="analogy"><span class="tag">Analogia</span><p>Não foi um exército. Foi um arrastão: escolhe a vítima pela porta aberta, não pelo nome. <b>Basta estar desatualizado.</b></p></div>
+  </div>
+  <aside class="notes"><p>Não diga que “a China atacou o mundo”. Endereço IP não indica país, e algumas máquinas usadas nos ataques eram de vítimas.</p></aside>
+</section>
+
+<!-- 22 · Ato 6 · P7 -->
+<section class="slide" id="ato6" data-anim="question" data-title="Ato 6 · P7 tempo de correção">
+  <div class="hazard"></div>
+  <p class="act-num">Ato 6 · O que muda no backlog</p>
+  <div class="qbox">
+    <span class="qtag">PERGUNTA 7 · enquete</span>
+    <p class="question">Quanto tempo uma correção crítica leva para sair do backlog e chegar à produção na sua squad?</p>
+  </div>
+  <div class="poll" data-answer="-1">
+    <button class="opt" type="button"><span class="lbl">Menos de 1 dia</span><span class="track"><i></i></span><span class="n">0</span></button>
+    <button class="opt" type="button"><span class="lbl">Até 1 semana</span><span class="track"><i></i></span><span class="n">0</span></button>
+    <button class="opt" type="button"><span class="lbl">Até 1 mês</span><span class="track"><i></i></span><span class="n">0</span></button>
+    <button class="opt" type="button"><span class="lbl">Mais de 1 mês</span><span class="track"><i></i></span><span class="n">0</span></button>
+    <button class="opt" type="button"><span class="lbl">Não sei</span><span class="track"><i></i></span><span class="n">0</span></button>
+  </div>
+  <div class="ctl"><button class="btn" data-reveal>Comparar com o atacante</button><button class="btn ghost" data-reset>Zerar</button></div>
+  <div class="reveal" hidden>
+    <div class="hbars">
+      <div class="hbar hot"><span>PHP2Shell</span><div class="track"><div class="fill" data-w="2%"></div></div><span class="v">minutos</span></div>
+      <div class="hbar hot"><span>Média dos atacantes</span><div class="track"><div class="fill" data-w="10%"></div></div><span class="v">3 dias</span></div>
+      <div class="hbar"><span>71% das explorações</span><div class="track"><div class="fill" data-w="23%"></div></div><span class="v">até 7 dias</span></div>
+      <div class="hbar"><span>Um mês</span><div class="track"><div class="fill" data-w="100%"></div></div><span class="v">30 dias</span></div>
+    </div>
+    <p class="lead">Se muitos responderam “não sei”, esse é o primeiro achado: não dá para melhorar um tempo que ninguém mede.</p>
+  </div>
+  <aside class="notes"><p>Pausa de 90 segundos, a mais longa da apresentação. Esta pergunta não tem resposta certa: o objetivo é comparar com o tempo do atacante.</p></aside>
+</section>
+
+<!-- 23 · Avião e juros -->
+<section class="slide" id="aviao" data-anim="plane" data-title="Manutenção e juros">
+  <p class="eyebrow">Como enxergar segurança no backlog</p>
+  <div class="cols-2">
+    <div class="stack">
+      <h2>Manutenção preventiva de avião</h2>
+      <div class="analogy"><span class="tag">Analogia</span><p>Numa companhia aérea, ninguém coloca “trocar peça com recall” na mesma fila de “poltrona nova na executiva”. A manutenção tem prazo, e o avião não decola sem ela.</p></div>
+    </div>
+    <div class="stack">
+      <h2>Juros compostos</h2>
+      <div class="analogy"><span class="tag">Analogia</span><p>Versão desatualizada é dívida com juros. Quem pulou 3 atualizações não tem 3 vezes o trabalho. Tem muito mais.</p></div>
+      <div class="stat alert"><b data-count="79" data-suffix="%">79%</b><span>dos serviços PHP expostos na internet rodavam versões que nem recebem mais correção oficial (Modat, 20/10)</span></div>
+    </div>
+  </div>
+  <p class="src">Fonte: The Hacker News, “Someone Tried to Exploit PHP2Shell 4 Days Before…”</p>
+</section>
+
+<!-- 24 · Seis combinados -->
+<section class="slide" id="combinados" data-anim="combos" data-title="Seis combinados">
+  <p class="eyebrow">Proposta para discussão</p>
+  <h2>Seis combinados para o backlog</h2>
+  <div class="cols-3 combos">
+    <div class="combo"><span class="n">1 · Faixa expressa</span><b>Classe de serviço própria para segurança, com prazo por criticidade</b><span>Exemplo: crítica e exposta à internet em até 72h; crítica interna em até 7 dias.</span><em>Faixa da ambulância</em></div>
+    <div class="combo"><span class="n">2 · Capacidade reservada</span><b>Uma fatia fixa de cada sprint para atualizações</b><span>A urgência não depende de negociação a cada vez.</span><em>Fundo de reserva do condomínio</em></div>
+    <div class="combo"><span class="n">3 · Lista de ingredientes</span><b>Inventário de linguagens, bibliotecas, versões e runtimes</b><span>Inclusive Java e Python “escondidos” em contêineres.</span><em>Rótulo do alimento</em></div>
+    <div class="combo"><span class="n">4 · Chaves com validade</span><b>Credenciais com data de expiração e troca programada</b><span>E troca imediata quando um fornecedor reportar incidente.</span><em>Trocar o segredo do cofre</em></div>
+    <div class="combo"><span class="n">5 · Quem tem a chave</span><b>Revisão periódica dos acessos de terceiros e integrações</b><span>Apps de backup, monitoramento, esteira de build.</span><em>Recolher o crachá do prestador</em></div>
+    <div class="combo"><span class="n">6 · O disjuntor</span><b>Decidir antes quem pode desligar um sistema e como avisar</b><span>Como o governo federal fez com o SEI em 21/10.</span><em>Plano de evacuação ensaiado</em></div>
+  </div>
+  <p class="lead">Nenhum desses itens é “projeto de segurança”. São itens de backlog, e quem decide a ordem do backlog está nesta sala.</p>
+  <aside class="notes"><p>Os prazos do item 1 são exemplos para provocar a discussão, não política aprovada.</p></aside>
+</section>
+
+<!-- 25 · Encerramento -->
+<section class="slide" id="encerramento" data-anim="closing" data-title="Encerramento">
+  <p class="eyebrow">Encerramento</p>
+  <div class="split">
+    <div class="stack">
+      <p class="lead">Lembram do alarme de gás? Em 21/10, quem tinha inventário e um disjuntor combinado evacuou em ordem e voltou no mesmo dia.</p>
+      <blockquote class="big">A próxima onda já está sendo descoberta agora. A diferença será <em>quanto tempo levamos para fechar a porta.</em></blockquote>
+    </div>
+    <div class="panel stack">
+      <h3>Três perguntas para a próxima planning</h3>
+      <ul class="plain pocket">
+        <li>Eu sei <b>o que</b> meus sistemas usam: linguagens, bibliotecas, versões e fornecedores?</li>
+        <li>Eu sei <b>quanto tempo</b> uma correção crítica leva para chegar à produção?</li>
+        <li>Existe <b>espaço reservado</b> no meu backlog para isso, ou dependemos de sobrar tempo?</li>
+      </ul>
+      <p class="muted">Próximo passo: 30 minutos com cada squad, nas próximas 2 semanas, para o Raio-X e a medição do tempo de correção.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 26 · Fontes -->
+<section class="slide" id="fontes" data-anim="none" data-title="Fontes">
+  <p class="eyebrow">Fontes principais · dados até 26/10/2026</p>
+  <div class="cols-2">
+    <ul class="plain src">
+      <li><a href="https://en.wikipedia.org/wiki/PHP2Shell" target="_blank" rel="noopener">Wikipedia · PHP2Shell</a></li>
+      <li><a href="https://thehackernews.com/2026/10/someone-tried-to-exploit-php2shell-4.html" target="_blank" rel="noopener">The Hacker News · PHP2Shell 4 dias antes</a></li>
+      <li><a href="https://www.theregister.com/cyber-crime/2026/10/22/hackers-pile-on-php2shell-as-aws-reveals-attacks-began-before-disclosure/5304749" target="_blank" rel="noopener">The Register · AWS e Cloudflare</a></li>
+      <li><a href="https://www.contabeis.com.br/noticias/80310/falha-mundial-derruba-internet-e-tira-sistemas-do-governo-do-ar-no-brasil" target="_blank" rel="noopener">Contábeis · SEI fora do ar</a></li>
+      <li><a href="https://agenciainfra.com/blog/sistemas-de-ministerios-e-agencias-ficam-fora-do-ar-apos-falha-de-seguranca/" target="_blank" rel="noopener">Agência iNFRA · ministérios e agências</a></li>
+      <li><a href="https://tech.yahoo.com/cybersecurity/articles/black-october-disclosure-wave-label-023233848.html" target="_blank" rel="noopener">Forkast/Yahoo · onda de divulgações</a></li>
+      <li><a href="https://agentbeam.com/blog/october-2026-software-supply-chain-incidents-tracker" target="_blank" rel="noopener">Agentbeam · ataques à cadeia de suprimentos</a></li>
+    </ul>
+    <ul class="plain src">
+      <li><a href="https://www.microsoft.com/en-us/security/blog/2026/10/23/inside-the-litellm-1-107-0-supply-chain-compromise-credential-theft-through-python-startup-hooks/" target="_blank" rel="noopener">Microsoft · LiteLLM 1.107.0</a></li>
+      <li><a href="https://gcn.com/ai-agent-password-spray-microsoft-365/22727" target="_blank" rel="noopener">GCN · Storm-0940 e ARTEX</a></li>
+      <li><a href="https://vibeincidents.com/incidents/cairn-exposed-panels-ai-intrusions/" target="_blank" rel="noopener">VibeIncidents · Cairn</a></li>
+      <li><a href="https://www.forbes.com/sites/thomasbrewster/2026/10/23/inside-openais-plan-to-protect-the-internet-before-hackers-break-it/" target="_blank" rel="noopener">Forbes · OpenAI e Patch the Planet</a></li>
+      <li><a href="https://1023jack.com/news/cves-are-going-to-the-moon-what-the-data-shows-about-ai-bug-hunters-and-the-patc/" target="_blank" rel="noopener">1023 Jack · volume de CVEs em 2026</a></li>
+      <li><a href="https://itbrief.co.uk/story/human-hackers-drive-attacks-as-ai-use-stays-limited" target="_blank" rel="noopener">IT Brief · Rapid7, tempo até exploração</a></li>
+      <li><a href="https://outpost24.com/blog/emudra-certificates-java-vulnerability/" target="_blank" rel="noopener">Outpost24 · eMudhra e Java</a></li>
+    </ul>
+  </div>
+  <p class="src">Base completa com 54 fontes: KB do projeto “Análise de Segurança · Black October”.</p>
+</section>
+
+<div id="notes-panel" hidden><h4>Notas do apresentador</h4><div id="notes-body"></div></div>
+
+<nav class="nav" aria-label="Navegação dos slides">
+  <button type="button" id="prev" aria-label="Slide anterior">←</button>
+  <button type="button" id="next" aria-label="Próximo slide">→</button>
+  <span class="count" id="count">1 / 26</span>
+  <span class="title" id="stitle">Capa</span>
+  <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+  <button type="button" class="nt" id="nt">Notas</button>
+  <button type="button" class="fs" id="fs">Tela cheia</button>
+</nav>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+(() => {
+  const NS = "http://www.w3.org/2000/svg";
+  const slides = [...document.querySelectorAll(".slide")];
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const q = (root, sel) => [...root.querySelectorAll(sel)];
+  const fmt = (n) => Math.round(n).toLocaleString("pt-BR");
+  const hasG = () => !!window.gsap && !reduce;
+  let cur = 0, ctx = null, cleanup = null, hands = 0;
+
+  // ---------- elementos estáticos gerados uma vez ----------
+  const ticks = document.getElementById("cover-ticks");
+  for (let i = 0; i < 12; i++) {
+    const a = (i / 12) * Math.PI * 2, l = document.createElementNS(NS, "line");
+    l.setAttribute("x1", 200 + Math.sin(a) * 150); l.setAttribute("y1", 200 - Math.cos(a) * 150);
+    l.setAttribute("x2", 200 + Math.sin(a) * 164); l.setAttribute("y2", 200 - Math.cos(a) * 164);
+    l.setAttribute("stroke-width", i % 3 === 0 ? 5 : 2.5); l.setAttribute("class", "s-fg"); ticks.appendChild(l);
+  }
+  const grid = document.getElementById("grid100");
+  for (let i = 0; i < 100; i++) { const c = document.createElement("i"); if (i < 66) c.className = "open"; grid.appendChild(c); }
+  // barras em estado final quando não houver animação
+  document.querySelectorAll(".hbar .fill").forEach((f) => { f.style.width = f.dataset.w; });
+
+  // ---------- enquetes ----------
+  document.querySelectorAll(".poll").forEach((poll) => {
+    const opts = q(poll, ".opt");
+    const draw = () => {
+      const counts = opts.map((o) => +o.querySelector(".n").textContent);
+      const max = Math.max(1, ...counts);
+      opts.forEach((o, i) => { o.querySelector(".track i").style.width = `${(counts[i] / max) * 100}%`; });
+    };
+    opts.forEach((o) => o.addEventListener("click", (e) => {
+      const n = o.querySelector(".n");
+      n.textContent = Math.max(0, +n.textContent + (e.shiftKey ? -1 : 1));
+      draw();
+    }));
+    poll._draw = draw;
+  });
+
+  function reveal(slide) {
+    const box = slide.querySelector(".reveal");
+    if (!box || !box.hidden) return;
+    box.hidden = false;
+    const poll = slide.querySelector(".poll");
+    if (poll) { const a = +poll.dataset.answer; if (a >= 0) q(poll, ".opt")[a].classList.add("correct"); }
+    if (!hasG()) return;
+    gsap.fromTo(box.children, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .5, stagger: .12, ease: "power2.out" });
+    q(box, ".hbar .fill").forEach((f) => gsap.fromTo(f, { width: 0 }, { width: f.dataset.w, duration: 1, delay: .2, ease: "power3.out" }));
+    q(box, "[data-count]").forEach(countUp);
+  }
+  function resetPoll(slide) {
+    const box = slide.querySelector(".reveal"); if (box) box.hidden = true;
+    q(slide, ".opt").forEach((o) => { o.classList.remove("correct"); o.querySelector(".n").textContent = "0"; });
+    const poll = slide.querySelector(".poll"); if (poll) poll._draw();
+  }
+  document.querySelectorAll("[data-reveal]").forEach((b) => b.addEventListener("click", () => reveal(b.closest(".slide"))));
+  document.querySelectorAll("[data-reset]").forEach((b) => b.addEventListener("click", () => resetPoll(b.closest(".slide"))));
+
+  // ---------- mãos levantadas ----------
+  const handsN = document.getElementById("hands-n"), handsBack = document.getElementById("hands-back");
+  document.querySelectorAll("[data-hand]").forEach((b) => b.addEventListener("click", () => {
+    hands = Math.max(0, hands + +b.dataset.hand);
+    handsN.textContent = hands; handsBack.textContent = hands;
+    if (hasG()) gsap.fromTo(handsN, { scale: 1.3 }, { scale: 1, duration: .3, ease: "back.out(3)" });
+  }));
+
+  // ---------- contador numérico ----------
+  function countUp(el) {
+    const end = +el.dataset.count, suf = el.dataset.suffix || "", o = { v: 0 };
+    gsap.fromTo(o, { v: 0 }, { v: end, duration: 1.4, ease: "power2.out",
+      onUpdate: () => { el.textContent = fmt(o.v) + suf; }, onComplete: () => { el.textContent = fmt(end) + suf; } });
+  }
+
+  const appear = (t, from, more = {}) => gsap.fromTo(t, { opacity: 0, ...from }, { opacity: 1, x: 0, y: 0, scale: 1, duration: .55, ease: "power2.out", ...more });
+
+  // ---------- animações por slide (partem do estado final do HTML; ctx.revert volta a ele) ----------
+  const ANIMS = {
+    cover(el) {
+      appear(q(el, ".stack > *"), { y: 24 }, { stagger: .1 });
+      gsap.to("#cover-hand", { rotation: 360, svgOrigin: "200 200", duration: 6, ease: "none", repeat: -1 });
+      const tl = gsap.timeline({ repeat: -1 });
+      tl.to("#cover-hand2", { rotation: 360, svgOrigin: "200 200", duration: 8, ease: "power3.in" })
+        .set("#cover-hand2", { rotation: 0, svgOrigin: "200 200" });
+    },
+    opening(el) {
+      const clock = el.querySelector("#op-clock");
+      const o = { m: 0 };
+      gsap.fromTo(o, { m: 0 }, { m: 15, duration: 1.2, ease: "power2.out", onUpdate: () => { clock.textContent = `12h${String(Math.round(o.m)).padStart(2, "0")}`; } });
+      appear(q(el, ".split .stack > *:not(#op-clock)"), { y: 18 }, { stagger: .18, delay: .4 });
+      appear(q(el, ".orgs .panel"), { y: 30 }, { stagger: .2, delay: 1.2 });
+    },
+    question(el) {
+      appear(q(el, ".qbox"), { y: 20 });
+      appear(q(el, ".opt"), { x: -20 }, { stagger: .08, delay: .3, duration: .4 });
+    },
+    agenda(el) {
+      appear(el.querySelector("blockquote"), { y: 20 }, { duration: .7 });
+      appear(q(el, ".agenda .door"), { y: 26 }, { stagger: .12, delay: .5 });
+    },
+    timeline(el) {
+      appear(q(el, "h2, .lead"), { y: 18 }, { stagger: .12 });
+      const groups = [], evs = q(el, ".tl-ev > *");
+      for (let i = 0; i < evs.length;) { const g = [evs[i++]]; while (i < evs.length && evs[i].tagName !== "circle") g.push(evs[i++]); groups.push(g); }
+      groups.forEach((g, i) => {
+        gsap.fromTo(g[0], { attr: { r: 0 } }, { attr: { r: +g[0].getAttribute("r") }, duration: .4, delay: .5 + i * .22, ease: "back.out(3)" });
+        gsap.fromTo(g.slice(1), { opacity: 0 }, { opacity: 1, duration: .3, delay: .6 + i * .22 });
+      });
+    },
+    php(el) {
+      appear(q(el, ".split > .stack:first-child > *"), { y: 18 }, { stagger: .12 });
+      q(el, ".hbar .fill").forEach((f, i) => gsap.fromTo(f, { width: 0 }, { width: f.dataset.w, duration: .9, delay: .6 + i * .45, ease: "power2.out" }));
+      appear(el.querySelector(".panel.stat"), { scale: .9 }, { delay: 2.6, ease: "back.out(2)" });
+    },
+    stamp(el) {
+      const k = el.querySelector("#key-digits");
+      const junk = "8f3a91c07e4b2d6f";
+      const o = { i: 0 };
+      gsap.fromTo(o, { i: 0 }, { i: 16, duration: 1.4, ease: "none",
+        onUpdate: () => { k.textContent = junk.slice(0, 16 - Math.floor(o.i)) || "4"; },
+        onComplete: () => { k.textContent = "4"; } });
+      gsap.fromTo(k, { scale: 1 }, { scale: 1.25, transformOrigin: "left center", duration: .25, yoyo: true, repeat: 1, delay: 1.45 });
+      appear(q(el, ".cols-2 .panel"), { y: 20 }, { stagger: .2, delay: 1.6 });
+    },
+    supply(el) {
+      appear(q(el, ".plain li"), { x: -16 }, { stagger: .15, delay: .3 });
+      const tl = gsap.timeline({ repeat: -1, repeatDelay: .5 });
+      tl.fromTo("#sup-dot", { attr: { cx: 130, cy: 150 }, opacity: 1 }, { attr: { cx: 280, cy: 137 }, duration: .8, ease: "power1.inOut" })
+        .to("#sup-dot", { attr: { cy: 183 }, duration: .5 })
+        .to("#sup-dot", { attr: { cy: 229 }, duration: .5 })
+        .to("#sup-dot", { attr: { r: 18 }, opacity: 0, duration: .4 })
+        .set("#sup-dot", { attr: { r: 9 } });
+    },
+    grid(el) {
+      appear(q(el, ".plain li"), { x: -16 }, { stagger: .15, delay: .3 });
+      gsap.fromTo(q(el, ".grid100 i"), { scale: 0 }, { scale: 1, duration: .25, stagger: { each: .012, from: "start" }, ease: "back.out(2)" });
+    },
+    clocks(el) {
+      gsap.to("#clk-slow", { rotation: 360, svgOrigin: "130 120", duration: 30, ease: "none", repeat: -1 });
+      gsap.to("#clk-fast", { rotation: 360, svgOrigin: "390 120", duration: 1.2, ease: "none", repeat: -1 });
+      appear(q(el, ".stat"), { y: 20 }, { stagger: .25, delay: .4 });
+    },
+    castle(el) {
+      const layer = el.querySelector("#castle-dots");
+      const gates = [[80, 52], [170, 52], [260, 52], [350, 52], [408, 151]];
+      const dots = gates.map(([x, y]) => { const c = document.createElementNS(NS, "circle"); c.setAttribute("r", 7); c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("opacity", 0); c.setAttribute("class", "f-alert"); layer.appendChild(c); return c; });
+      const tl = gsap.timeline({ repeat: -1, repeatDelay: .6 });
+      dots.forEach((d, i) => {
+        const [x, y] = gates[i], side = i === 4;
+        tl.fromTo(d, { attr: { cx: side ? 470 : x, cy: side ? y : 0 }, opacity: 1 },
+          { attr: { cx: side ? 360 : x, cy: side ? y : 120 }, duration: .7, ease: "power1.in" }, i * .35)
+          .to(d, { opacity: 0, duration: .3 }, ">");
+      });
+      appear(q(el, ".gates rect"), { scale: .5 }, { stagger: .1, transformOrigin: "50% 50%", ease: "back.out(3)" });
+      return () => dots.forEach((d) => d.remove());
+    },
+    door(el) {
+      appear(q(el, ".case > *"), { y: 16 }, { stagger: .1 });
+      appear(el.querySelector(".panel.stat"), { scale: .9 }, { delay: .5, ease: "back.out(2)" });
+      q(el, "[data-count]").forEach((c) => gsap.delayedCall(.5, () => countUp(c)));
+    },
+    raiox(el) {
+      appear(q(el, ".plain li"), { x: -16 }, { stagger: .25, delay: .5 });
+      appear(el.querySelector("blockquote"), { y: 20 }, { duration: .7, delay: .2 });
+    },
+    plane(el) {
+      appear(q(el, ".cols-2 > .stack"), { y: 24 }, { stagger: .3 });
+      q(el, "[data-count]").forEach((c) => gsap.delayedCall(.8, () => countUp(c)));
+    },
+    combos(el) {
+      appear(q(el, ".combo"), { y: 26 }, { stagger: .12 });
+    },
+    closing(el) {
+      appear(el.querySelector("blockquote"), { y: 20 }, { duration: .8, delay: .4 });
+      appear(q(el, ".pocket li"), { x: -16 }, { stagger: .3, delay: 1 });
+    },
+    none() {},
+  };
+
+  // ---------- notas ----------
+  const notesPanel = document.getElementById("notes-panel"), notesBody = document.getElementById("notes-body");
+  function syncNotes() {
+    const n = slides[cur].querySelector(".notes");
+    notesBody.innerHTML = n ? n.innerHTML : "<p>Sem notas para este slide.</p>";
+  }
+  function toggleNotes() { notesPanel.hidden = !notesPanel.hidden; syncNotes(); }
+
+  function go(i) {
+    i = Math.max(0, Math.min(slides.length - 1, i));
+    if (ctx) ctx.revert();
+    if (cleanup) cleanup();
+    ctx = null; cleanup = null;
+    slides[cur].classList.remove("active");
+    cur = i;
+    const el = slides[cur];
+    el.classList.add("active");
+    el.scrollTop = 0;
+    document.getElementById("count").textContent = `${cur + 1} / ${slides.length}`;
+    document.getElementById("stitle").textContent = el.dataset.title;
+    document.getElementById("bar").style.width = `${((cur + 1) / slides.length) * 100}%`;
+    try { history.replaceState(null, "", `#${el.id}`); } catch (e) { /* ignorado */ }
+    syncNotes();
+    const anim = ANIMS[el.dataset.anim];
+    if (anim && hasG()) ctx = gsap.context(() => { cleanup = anim(el) || null; }, el);
+  }
+
+  document.getElementById("prev").addEventListener("click", () => go(cur - 1));
+  document.getElementById("next").addEventListener("click", () => go(cur + 1));
+  document.getElementById("nt").addEventListener("click", toggleNotes);
+  document.getElementById("fs").addEventListener("click", () => {
+    const d = document.documentElement;
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    else if (d.requestFullscreen) d.requestFullscreen().catch(() => {});
+  });
+  document.addEventListener("keydown", (e) => {
+    const onButton = e.target.closest && e.target.closest("button");
+    if (["ArrowRight", "PageDown"].includes(e.key) || (e.key === " " && !onButton)) { e.preventDefault(); go(cur + 1); }
+    else if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); go(cur - 1); }
+    else if (e.key === "Home") go(0);
+    else if (e.key === "End") go(slides.length - 1);
+    else if (e.key === "r" || e.key === "R") reveal(slides[cur]);
+    else if (e.key === "n" || e.key === "N") toggleNotes();
+  });
+  let touchX = null;
+  document.addEventListener("touchstart", (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener("touchend", (e) => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 60) go(cur + (dx < 0 ? 1 : -1));
+    touchX = null;
+  });
+  window.addEventListener("hashchange", () => { const i = slides.findIndex((s) => `#${s.id}` === location.hash); if (i >= 0 && i !== cur) go(i); });
+
+  const start = slides.findIndex((s) => `#${s.id}` === location.hash);
+  go(start >= 0 ? start : 0);
+})();
+</script>
+
+</body></html>
